@@ -3,6 +3,7 @@ export type Note = {
   title: string;
   description: string;
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export async function updateNotes(id: string, newNotes: Note[]) {
@@ -51,14 +52,14 @@ export async function getNotes(productId: string): Promise<Note[]> {
   );
 
   if (res?.data?.product?.metafield?.value) {
-    const issues: Note[] = JSON.parse(res.data.product.metafield.value);
-    const sortedIssues = issues.sort((a, b) => {
+    const notes: Note[] = JSON.parse(res.data.product.metafield.value);
+    const sortedNotes = notes.sort((a, b) => {
       if (a.createdAt && b.createdAt) {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
       return (b.id ?? 0) - (a.id ?? 0);
     });
-    return sortedIssues;
+    return sortedNotes;
   }
 
   return [];
