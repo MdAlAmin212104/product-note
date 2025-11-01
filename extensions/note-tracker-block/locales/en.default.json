@@ -1,0 +1,14 @@
+{
+  "name": "Product Notes",
+  "Note-column-heading": "Note",
+  "status-column-heading": "Status",
+  "select-label": "Status",
+  "option-todo": "À faire",
+  "option-completed": "Completed",
+  "delete-Note-button": "Delete Note",
+  "edit-Note-button": "Edit Note",
+  "add-Note-button": "Add Note",
+  "collapsed-summary": "Not enough product variants",
+  "no-Notes-text": "No Notes for this product",
+  "add-first-Note-button": "Add your first Note"
+}

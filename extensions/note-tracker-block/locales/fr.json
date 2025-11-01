@@ -1,0 +1,14 @@
+{
+  "name": "Problèmes de produit",
+  "Note-column-heading": "Problème",
+  "status-column-heading": "Statut",
+  "select-label": "Statut",
+  "option-todo": "À faire",
+  "option-completed": "Terminé",
+  "delete-Note-button": "Supprimer le problème",
+  "edit-Note-button": "Modifier le problème",
+  "add-Note-button": "Ajouter un problème",
+  "collapsed-summary": "Pas assez de variantes de produit",
+  "no-Notes-text": "Aucun problème pour ce produit",
+  "add-first-Note-button": "Ajouter votre premier problème"
+}
