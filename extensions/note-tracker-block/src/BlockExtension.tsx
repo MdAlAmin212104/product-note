@@ -38,17 +38,16 @@ function Extension() {
   // Pagination logic
   const paginatedNotes = useMemo(() => {
     if (notesCount <= PAGE_SIZE) return notes;
-    return notes.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    return [...notes].slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   }, [notesCount, notes, currentPage]);
 
   // Delete notes
   const handleDelete = async (id: number) => {
-    console.log(id, "detelt note click");
     const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
     await updateNotes(productId, newNotes);
   };
-
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
 
   if (loading) {
     return (
@@ -63,7 +62,7 @@ function Extension() {
       <s-form id="Note-form">
         {notes.length ? (
           <>
-          <s-grid justifyItems="end" padding="none none small none">
+            <s-grid justifyItems="end" padding="none none small none">
               <s-button
                 variant="primary"
                 onClick={() => {
@@ -75,7 +74,7 @@ function Extension() {
               </s-button>
             </s-grid>
             <s-table
-            
+
               id="Note-table"
               paginate={notes.length > PAGE_SIZE}
               onNextPage={() => setCurrentPage(currentPage + 1)}
@@ -114,6 +113,36 @@ function Extension() {
                       })
                       : null;
 
+                  // If delete confirmation is active for this row
+                  if (deleteConfirmId === id) {
+                    return (
+                      <s-table-row key={id}>
+                        <s-table-cell colspan="3">
+                          <s-stack direction="inline" gap="base" alignItems="center">
+                            <s-paragraph>Are you sure you want to delete <s-chip>{title}</s-chip>? This action cannot be undone.</s-paragraph>
+                            <s-button
+                              variant="primary"
+                              tone="critical"
+                              onClick={() => {
+                                handleDelete(id!);
+                                setDeleteConfirmId(null);
+                              }}
+                            >
+                              Confirm Delete
+                            </s-button>
+                            <s-button
+                              variant="secondary"
+                              onClick={() => setDeleteConfirmId(null)}
+                            >
+                              Cancel
+                            </s-button>
+                          </s-stack>
+                        </s-table-cell>
+                      </s-table-row>
+                    );
+                  }
+
+                  // Normal row display
                   return (
                     <s-table-row key={id}>
                       <s-table-cell>
@@ -136,7 +165,6 @@ function Extension() {
                             navigation?.navigate(url);
                           }}
                         />
-
                       </s-table-cell>
 
                       <s-table-cell>
@@ -144,7 +172,7 @@ function Extension() {
                           variant="tertiary"
                           icon="delete"
                           accessibilityLabel={i18n.translate("delete-Note-button")}
-                          onClick={() => handleDelete(id!)}
+                          onClick={() => setDeleteConfirmId(id!)}
                         />
                       </s-table-cell>
                     </s-table-row>
