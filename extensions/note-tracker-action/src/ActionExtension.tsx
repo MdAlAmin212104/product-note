@@ -1,56 +1,83 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {render} from 'preact';
-import {useEffect, useState} from 'preact/hooks';
+import {useCallback, useEffect, useState} from 'preact/hooks';
+import { getNotes, updateNotes } from './utils';
 
 export default async () => {
   render(<Extension />, document.body);
 }
 
+
+function validateForm({ title, description }) {
+  return {
+    isValid: Boolean(title) && Boolean(description),
+    errors: {
+      title: !title,
+      description: !description,
+    },
+  };
+}
+
+
 function Extension() {
-  const {i18n, close, data, extension: {target}} = shopify;
-  console.log({data});
-  const [productTitle, setProductTitle] = useState('');
-  // Use direct API calls to fetch data from Shopify.
-  // See https://shopify.dev/docs/api/admin-graphql for more information about Shopify's GraphQL API
-  useEffect(() => {
-    (async function getProductInfo() {
-      const getProductQuery = {
-        query: `query Product($id: ID!) {
-          product(id: $id) {
-            title
-          }
-        }`,
-        variables: {id: data.selected[0].id},
-      };
+    const {i18n, close, data} = shopify;
+    const [note, setnote] = useState({ title: "", description: "" });
+    const [allnotes, setAllnotes] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = note;
 
-      const res = await fetch("shopify:admin/api/graphql.json", {
-        method: "POST",
-        body: JSON.stringify(getProductQuery),
-      });
+    useEffect(() => {
+      getNotes(data.selected[0].id).then((notes) =>
+        setAllnotes(notes || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-      if (!res.ok) {
-        console.error('Network error');
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(note);
+      setFormErrors(errors);
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateNotes(data.selected[0].id, [...allnotes, note]);
+        close();
       }
+    }, [note, data.selected, allnotes, close]);
 
-      const productData = await res.json();
-      setProductTitle(productData.data.product.title);
-    })();
-  }, [data.selected]);
   return (
     // The AdminAction component provides an API for setting the title and actions of the Action extension wrapper.
     <s-admin-action>
-      <s-stack direction="block">
-        {/* Set the translation values for each supported language in the locales directory */}
-        <s-text type="strong">{i18n.translate('welcome', {target})}</s-text>
-        <s-text>Current product: {productTitle}</s-text>
-      </s-stack>
-      <s-button slot="primary-action" onClick={() => {
-          console.log('saving');
-          close();
-        }}>Done</s-button>
+      <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("note-title-error") : undefined
+          }
+          onChange={(event: any) =>
+            setnote((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("note-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("note-description-error")
+                : undefined
+            }
+            onChange={(event: any) =>
+              setnote((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("note-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      <s-button slot="primary-action" onClick={onSubmit}>{i18n.translate("note-create-button")}</s-button>
       <s-button slot="secondary-actions" onClick={() => {
           console.log('closing');
           close();
-      }}>Close</s-button>
+      }}>{i18n.translate("note-cancel-button")}</s-button>
     </s-admin-action>
   );
 }

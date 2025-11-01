@@ -2,7 +2,7 @@ api_version = "2025-10"
 [[extensions]]
 # Change the merchant-facing name of the extension in locales/en.default.json
 name = "t:name"
-handle = "note-tracker-action"
+handle = "Note-Added-Action"
 type = "ui_extension"
 uid = "ef1e6318-3419-c0e0-2581-88b5ce2ef664d24ce4f1"
 

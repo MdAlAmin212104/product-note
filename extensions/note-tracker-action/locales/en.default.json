@@ -1,4 +1,16 @@
 {
-  "name": "note-tracker-action",
-  "welcome": "Welcome to the {{target}} extension!"
+  "name": "Note Added Action",
+  "welcome": "Welcome to the {{target}} extension!",
+  "create-note-heading": "Create an note",
+  "edit-note-heading": "Edit your note",
+  "note-description-label": "Description",
+  "note-description-error": "Please enter a description",
+  "note-title-label": "Title",
+  "note-title-error": "Please enter a title",
+  "note-create-button": "Create",
+  "note-cancel-button": "Cancel",
+  "note-save-button": "Save",
+  "note-edit-button": "Edit",
+  "note-generate-button": "Generate note",
+  "note-generate-banner-text": "Automatically fill the note based on past customer feedback"
 }
