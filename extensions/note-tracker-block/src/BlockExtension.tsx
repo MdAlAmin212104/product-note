@@ -95,31 +95,43 @@ function Extension() {
 
               <s-table-body>
                 {paginatedNotes.map(({ id, title, description, createdAt, updatedAt }) => {
-                  const updatedTime = updatedAt
-                    ? new Date(updatedAt).toLocaleString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                      hour: 'numeric',
-                      minute: '2-digit',
-                    })
-                    : createdAt
-                      ? new Date(createdAt).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })
-                      : null;
+                  const getFormattedTime = (updatedAt?: string, createdAt?: string) => {
+                    const date = updatedAt ? new Date(updatedAt) : createdAt ? new Date(createdAt) : null;
+                    if (!date) return null;
+
+                    const now = new Date();
+                    const diffMs = now.getTime() - date.getTime();
+                    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                    // const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+                    if (diffMinutes < 1) return "Just now";
+                    if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`;
+                    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+
+                    // More than 1 day old → show formatted date
+                    return date.toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    });
+                  };
+
+                  const updatedTime = getFormattedTime(updatedAt, createdAt);
 
                   // If delete confirmation is active for this row
                   if (deleteConfirmId === id) {
                     return (
                       <s-table-row key={id}>
-                        <s-table-cell colspan="3">
+                        <s-table-cell>
                           <s-stack direction="inline" gap="base" alignItems="center">
-                            <s-paragraph>Are you sure you want to delete <s-chip>{title}</s-chip>? This action cannot be undone.</s-paragraph>
+                            <s-paragraph>Are you sure you want to delete <s-chip>
+                              {title.split(" ").slice(0, 3).join(" ")}
+                              {title.split(" ").length > 3 && "..."}
+                            </s-chip>
+                              ? This action cannot be undone.</s-paragraph>
                             <s-button
                               variant="primary"
                               tone="critical"
@@ -150,7 +162,9 @@ function Extension() {
                           <s-heading>{title}</s-heading>
                           <s-paragraph>{description}</s-paragraph>
                           {updatedTime && (
-                            <s-badge tone="success">Last updated on {updatedTime}</s-badge>
+                            <s-badge tone="success">
+                              Last updated {updatedTime}
+                            </s-badge>
                           )}
                         </s-box>
                       </s-table-cell>
