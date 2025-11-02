@@ -21,6 +21,7 @@ export async function getAllNotes(request: Request) {
                 title
                 metafield(namespace: "$app", key: "notes") {
                   value
+                  
                 }
                 media(first: 1) {
                   nodes {
