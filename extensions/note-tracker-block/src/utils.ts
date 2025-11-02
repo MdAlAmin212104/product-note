@@ -65,6 +65,7 @@ export async function getNotes(productId: string): Promise<Note[]> {
   return [];
 }
 
+
 async function makeGraphQLQuery(
   query: string,
   variables: {
