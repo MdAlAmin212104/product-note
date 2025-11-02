@@ -87,7 +87,7 @@ function Extension() {
                   {i18n.translate("Note-column-heading")}
                 </s-table-header>
                 <s-table-header>
-                  {i18n.translate("status-column-heading")}
+                  Edit
                 </s-table-header>
 
                 <s-table-header>Delete</s-table-header>

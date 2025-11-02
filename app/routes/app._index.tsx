@@ -78,7 +78,6 @@ const NotesTable = ({
                         overflow="hidden"
                         inlineSize="20px"
                         blockSize="20px"
-                        target="_blank"
                       >
                         {product.imageUrl ? (
                           <s-image
