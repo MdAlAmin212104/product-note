@@ -9,7 +9,6 @@ type Note = {
 
 
 export async function updateNotes(id: string, newNotes: Note[]) {
-  console.log(id, newNotes, "thisis call for backentt sestem so ------------------------------");
   // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
   return await makeGraphQLQuery(
     `mutation SetMetafield($ownerId: ID!, $namespace: String!, $key: String!, $type: String!, $value: String!) {

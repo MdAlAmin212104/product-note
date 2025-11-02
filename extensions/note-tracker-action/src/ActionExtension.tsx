@@ -149,7 +149,7 @@ function Extension() {
         ? "Update"
         : "Create"}</s-button>
       <s-button slot="secondary-actions" onClick={() => {
-        console.log('closing');
+        
         close();
       }}>{i18n.translate("note-cancel-button")}</s-button>
     </s-admin-action>

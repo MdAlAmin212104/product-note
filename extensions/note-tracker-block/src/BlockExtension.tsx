@@ -201,8 +201,8 @@ function Extension() {
               <s-box maxInlineSize="200px" maxBlockSize="200px">
                 <s-image
                   aspectRatio="1/0.5"
-                  src="https://cdn.shopify.com/static/images/polaris/patterns/callout.png"
-                  alt="A stylized graphic of four characters, each holding a puzzle piece"
+                  src="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+                  alt="Create a New Note"
                 />
               </s-box>
               <s-grid justifyItems="center" maxInlineSize="450px" gap="base">
