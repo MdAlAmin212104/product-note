@@ -48,6 +48,8 @@ const NotesTable = ({
   return (
     <s-section padding="base" accessibilityLabel="Product Notes Table">
       <s-search-field
+        label="Search for a product"
+        labelAccessibilityVisibility="exclusive"
         placeholder="Search for a product"
         autocomplete="on"
         value={searchQuery}
@@ -171,6 +173,12 @@ export default function Index() {
   return (
     <s-page heading="Shopify App Notes">
       <s-section heading="Overview">
+        <div style={{ display: "flex", justifyContent: "end", marginTop: "-30px", marginBottom: "10px" }}>
+          <s-button href="/app/notes/new" variant="primary">
+            Create Note
+          </s-button>
+        </div>
+
         <s-grid gap="small" gridTemplateColumns="repeat(4, 1fr)">
           <s-grid-item>
             <s-box padding="base" background="subdued" border="base" borderRadius="base">
@@ -179,36 +187,32 @@ export default function Index() {
             </s-box>
           </s-grid-item>
           <s-grid-item>
-			<s-box padding="base" background="subdued" border="base" borderRadius="base">
-            <s-heading>Total Notes</s-heading>
-            <s-paragraph>
-              {productsWithNotes.reduce((sum, p) => sum + p.notes.length, 0)}
-            </s-paragraph>
-			</s-box>
+            <s-box padding="base" background="subdued" border="base" borderRadius="base">
+              <s-heading>Total Notes</s-heading>
+              <s-paragraph>
+                {productsWithNotes.reduce((sum, p) => sum + p.notes.length, 0)}
+              </s-paragraph>
+            </s-box>
           </s-grid-item>
           <s-grid-item>
-			<s-box padding="base" background="subdued" border="base" borderRadius="base">
-            <s-heading>Products with Notes</s-heading>
-            <s-paragraph>
-              {productsWithNotes.length}
-            </s-paragraph>
-			</s-box>
+            <s-box padding="base" background="subdued" border="base" borderRadius="base">
+              <s-heading>Products with Notes</s-heading>
+              <s-paragraph>
+                {productsWithNotes.length}
+              </s-paragraph>
+            </s-box>
           </s-grid-item>
           <s-grid-item>
-			<s-box padding="base" background="subdued" border="base" borderRadius="base">
-            <s-heading>Products without Notes</s-heading>
-            <s-paragraph>
-              {allNotes.length - productsWithNotes.length}
-            </s-paragraph>
-			</s-box>
+            <s-box padding="base" background="subdued" border="base" borderRadius="base">
+              <s-heading>Products without Notes</s-heading>
+              <s-paragraph>
+                {allNotes.length - productsWithNotes.length}
+              </s-paragraph>
+            </s-box>
           </s-grid-item>
         </s-grid>
 
       </s-section>
-
-      <s-link slot="secondary-actions" href="/app/notes/new">
-        Create New Note
-      </s-link>
 
       {productsWithNotes.length === 0 ? (
         <EmptyState />
