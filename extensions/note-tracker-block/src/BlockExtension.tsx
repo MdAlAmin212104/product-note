@@ -62,8 +62,10 @@ function Extension() {
       <s-form id="Note-form">
         {notes.length ? (
           <>
-            <s-grid justifyItems="end" padding="none none small none">
-              <s-button
+          <s-stack direction="inline" justifyContent="space-between"  paddingBlockEnd="small">
+              <s-heading>Note History</s-heading>
+              <div style={{marginBottom: "10px"}}>
+                <s-button
                 variant="primary"
                 onClick={() => {
                   const url = `extension:Note-Added-Action`;
@@ -72,15 +74,17 @@ function Extension() {
               >
                 {i18n.translate("add-Note-button")}
               </s-button>
-            </s-grid>
+              </div>
+              
+            </s-stack>
             <s-table
-
               id="Note-table"
               paginate={notes.length > PAGE_SIZE}
               onNextPage={() => setCurrentPage(currentPage + 1)}
               onPreviousPage={() => setCurrentPage(currentPage - 1)}
               hasNextPage={currentPage < totalPages}
               hasPreviousPage={currentPage > 1}
+            
             >
               <s-table-header-row>
                 <s-table-header listSlot="primary">

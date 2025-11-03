@@ -39,96 +39,176 @@ const NotesTable = ({
   shopDomain: string;
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter products based on search query
+  const ITEMS_PER_PAGE = 10;
+
+  // 🔍 Filter products based on search query
   const filteredProducts = productsWithNotes.filter((product: any) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // 📊 Pagination logic
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
+  // 🔄 Change page handlers
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <s-section padding="base" accessibilityLabel="Product Notes Table">
+      {/* 🔎 Search Field */}
       <s-search-field
         label="Search for a product"
         labelAccessibilityVisibility="exclusive"
         placeholder="Search for a product"
         autocomplete="on"
         value={searchQuery}
-        onInput={(e: any) => setSearchQuery(e.target.value)}
+        onInput={(e: any) => {
+          setSearchQuery(e.target.value);
+          setCurrentPage(1); // reset to first page on search
+        }}
       ></s-search-field>
 
-      {filteredProducts.length === 0 ? (
+      {/* 🚫 No Results */}
+      {currentProducts.length === 0 ? (
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <s-paragraph>No products found matching `{searchQuery}`</s-paragraph>
         </div>
       ) : (
-        filteredProducts.map((product: any) => {
-          const numericProductId = product.id.split("/").pop();
-          const adminProductUrl = `https://${shopDomain}/admin/products/${numericProductId}`;
-          const modalId = `modal-${numericProductId}`;
+        <>
+          {/* 🧾 Product List */}
+          {currentProducts.map((product: any) => {
+            const numericProductId = product.id.split("/").pop();
+            const adminProductUrl = `https://${shopDomain}/admin/products/${numericProductId}`;
+            const modalId = `modal-${numericProductId}`;
 
-          return (
-            <div key={product.id} style={{ marginTop: "10px" }}>
-              <s-grid alignItems="center">
-                <s-grid-item border="base" padding="base" borderRadius="base">
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <s-stack direction="inline" gap="small" alignItems="center">
-                      <s-clickable
-                        href={adminProductUrl}
-                        accessibilityLabel={`Go to the product page for ${product.title}`}
-                        border="base"
-                        borderRadius="base"
-                        overflow="hidden"
-                        inlineSize="20px"
-                        blockSize="20px"
-                      >
-                        {product.imageUrl ? (
-                          <s-image
-                            objectFit="cover"
-                            src={product.imageUrl}
-                            alt={product.imageAlt || product.title}
-                          ></s-image>
-                        ) : (
-                          <s-icon type="image" />
-                        )}
-                      </s-clickable>
+            return (
+              <div key={product.id} style={{ marginTop: "10px" }}>
+                <s-grid alignItems="center">
+                  <s-grid-item border="base" padding="base" borderRadius="base">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* 🖼️ Product Info */}
+                      <s-stack direction="inline" gap="small" alignItems="center" justifyContent="center">
+                        <s-clickable
+                          href={adminProductUrl}
+                          accessibilityLabel={`Go to the product page for ${product.title}`}
+                          border="base"
+                          borderRadius="base"
+                          overflow="hidden"
+                          inlineSize="40px"
+                          blockSize="40px"
+                        >
+                          {product.imageUrl ? (
+                            <s-image
+                              objectFit="cover"
+                              src={product.imageUrl}
+                              alt={product.imageAlt || product.title}
+                            ></s-image>
+                          ) : (
+                            
+                            <s-image
+                              objectFit="cover"
+                              src="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+                              alt="Create a New Note"
+                            ></s-image>
+                            
+                          )}
+                        </s-clickable>
 
-                      <s-link href={adminProductUrl} target="_blank">
-                        {product.title}
-                      </s-link>
-                    </s-stack>
+                        <s-link href={adminProductUrl} target="_blank">
+                          {product.title}
+                        </s-link>
+                      </s-stack>
 
-                    <s-stack>
-                      <s-button commandFor={modalId} tone="neutral">
-                        Notes: {product.notes.length > 0 ? product.notes.length : "No notes"}
-                      </s-button>
+                      {/* 📓 Notes Button */}
+                      <s-stack>
+                        <s-button commandFor={modalId} tone="neutral">
+                          Notes:{" "}
+                          {product.notes.length > 0
+                            ? product.notes.length
+                            : "No notes"}
+                        </s-button>
 
-                      <s-modal id={modalId} heading={`Notes for ${product.title}`}>
-                        {product.notes.length > 0 ? (
-                          product.notes.map((note: any, index: number) => (
-                            <s-stack key={note.id} padding="small">
-                              <s-stack direction="inline">
-                                <s-heading>Note {index + 1}:</s-heading>
-                                <s-heading>{note.title}</s-heading>
+                        <s-modal
+                          id={modalId}
+                          heading={`Notes for ${product.title}`}
+                        >
+                          {product.notes.length > 0 ? (
+                            product.notes.map((note: any, index: number) => (
+                              <s-stack key={note.id} padding="small">
+                                <s-stack direction="inline">
+                                  <s-heading>Note {index + 1}:</s-heading>
+                                  <s-heading>{note.title}</s-heading>
+                                </s-stack>
+                                <s-paragraph>{note.description}</s-paragraph>
                               </s-stack>
-                              <s-paragraph>{note.description}</s-paragraph>
-                            </s-stack>
-                          ))
-                        ) : (
-                          <s-paragraph>No notes found for this product.</s-paragraph>
-                        )}
-                      </s-modal>
-                    </s-stack>
-                  </div>
-                </s-grid-item>
-              </s-grid>
-            </div>
-          );
-        })
+                            ))
+                          ) : (
+                            <s-paragraph>
+                              No notes found for this product.
+                            </s-paragraph>
+                          )}
+                        </s-modal>
+                      </s-stack>
+                    </div>
+                  </s-grid-item>
+                </s-grid>
+              </div>
+            );
+          })}
+
+          {/* 📄 Pagination Controls */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "20px",
+            }}
+          >
+            <s-button
+              variant="secondary"
+              tone="neutral"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </s-button>
+            <s-badge tone="info">
+              Page {currentPage} of {totalPages}
+            </s-badge>
+            <s-button
+              variant="secondary"
+              tone="neutral"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </s-button>
+          </div>
+        </>
       )}
     </s-section>
   );
 };
-
 /* Empty state */
 const EmptyState = () => (
   <s-section accessibilityLabel="Empty state section">

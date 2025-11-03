@@ -130,7 +130,7 @@ function Extension() {
         label={i18n.translate("note-title-label")}
         maxLength={50}
       />
-      <s-box padding-block-start="large">
+      <s-stack paddingBlockStart='small'>
         <s-text-area
           value={description}
           error={
@@ -144,7 +144,7 @@ function Extension() {
           label={i18n.translate("note-description-label")}
           maxLength={300}
         />
-      </s-box>
+      </s-stack>
       <s-button slot="primary-action" onClick={onSubmit}>  {isEditing
         ? "Update"
         : "Create"}</s-button>
