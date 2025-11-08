@@ -19,7 +19,7 @@ export async function getAllNotes(request: Request) {
               node {
                 id
                 title
-                metafield(namespace: "$app", key: "notes") {
+                metafield(namespace: "app", key: "notes") {
                   value
 
                 }
@@ -92,7 +92,7 @@ export async function updateNotes(request: Request) {
       `#graphql
       query GetProductNotes($id: ID!) {
         product(id: $id) {
-          metafield(namespace: "$app", key: "notes") {
+          metafield(namespace: "app", key: "notes") {
             value
           }
         }
@@ -125,7 +125,7 @@ export async function updateNotes(request: Request) {
       mutation SetMetafield($ownerId: ID!, $value: String!) {
         metafieldsSet(metafields: [{
           ownerId: $ownerId,
-          namespace: "$app",
+          namespace: "app",
           key: "notes",
           type: "json",
           value: $value

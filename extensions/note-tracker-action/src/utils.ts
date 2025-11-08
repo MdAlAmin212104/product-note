@@ -28,7 +28,7 @@ export async function updateNotes(id: string, newNotes: Note[]) {
     }`,
     {
       ownerId: id,
-      namespace: "$app",
+      namespace: "app",
       key: "notes", 
       type: "json",
       value: JSON.stringify(newNotes),
@@ -41,7 +41,7 @@ export async function getNotes(productId: string): Promise<Note[] | undefined> {
   const res = await makeGraphQLQuery(
     `query Product($id: ID!) {
       product(id: $id) {
-        metafield(namespace: "$app", key: "notes") {
+        metafield(namespace: "app", key: "notes") {
           value
         }
       }
