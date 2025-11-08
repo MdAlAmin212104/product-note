@@ -2,7 +2,7 @@
 
 client_id = "7dde89bdf6a2a775a9dd2c46ffcee1a0"
 name = "product note"
-application_url = "https://product-note.onrender.com"
+application_url = "https://example.com"
 embedded = true
 
 [build]
@@ -25,4 +25,4 @@ api_version = "2026-01"
 scopes = "write_products"
 
 [auth]
-redirect_urls = [ "https://product-note.onrender.com/api/auth" ]
+redirect_urls = [ "https://example.com/api/auth" ]
