@@ -2,15 +2,14 @@
 
 client_id = "7dde89bdf6a2a775a9dd2c46ffcee1a0"
 name = "product note"
-application_url = "https://example.com"
+application_url = "https://product-note.onrender.com/"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
-include_config_on_deploy = true
 
 [webhooks]
-api_version = "2026-01"
+api_version = "2025-10"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
@@ -25,4 +24,4 @@ api_version = "2026-01"
 scopes = "write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://product-note.onrender.com/api/auth" ]
