@@ -122,13 +122,13 @@ const NotesTable = ({
                               alt={product.imageAlt || product.title}
                             ></s-image>
                           ) : (
-                            
+
                             <s-image
                               objectFit="cover"
                               src="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
                               alt="Create a New Note"
                             ></s-image>
-                            
+
                           )}
                         </s-clickable>
 
@@ -175,35 +175,37 @@ const NotesTable = ({
           })}
 
           {/* 📄 Pagination Controls */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "12px",
-              marginTop: "20px",
-            }}
-          >
-            <s-button
-              variant="secondary"
-              tone="neutral"
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
+          {totalPages > 1 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "12px",
+                marginTop: "20px",
+              }}
             >
-              Previous
-            </s-button>
-            <s-badge tone="info">
-              Page {currentPage} of {totalPages}
-            </s-badge>
-            <s-button
-              variant="secondary"
-              tone="neutral"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </s-button>
-          </div>
+              <s-button
+                variant="secondary"
+                tone="neutral"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </s-button>
+              <s-badge tone="info">
+                Page {currentPage} of {totalPages}
+              </s-badge>
+              <s-button
+                variant="secondary"
+                tone="neutral"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </s-button>
+            </div>
+          )}
         </>
       )}
     </s-section>
