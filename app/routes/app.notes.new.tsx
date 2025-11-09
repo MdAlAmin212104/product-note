@@ -63,13 +63,14 @@ export default function NewNote() {
     formData.append("products", JSON.stringify(selectedProducts));
     formData.append("noteTitle", noteTitle);
     formData.append("noteDescription", noteDescription);
+    console.log(formData, "this is form data ----------------------------------");
 
-    submit(formData, {
+    await submit(formData, {
       method: "post",
       encType: "multipart/form-data"
     });
     setLoading(false);
-    alert("Note created successfully!");
+    // alert("Note created successfully!");
 
     navigate("/app");
   }
