@@ -64,7 +64,10 @@ export default function NewNote() {
     formData.append("noteTitle", noteTitle);
     formData.append("noteDescription", noteDescription);
 
-    submit(formData, { method: "post" });
+    submit(formData, {
+      method: "post",
+      encType: "multipart/form-data"
+    });
     setLoading(false);
     alert("Note created successfully!");
 
