@@ -6,6 +6,10 @@ import {
 } from "@shopify/shopify-app-react-router/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
+import { handleShopInfo } from "./utils/handleShopInfo.server";
+import { CLIENT_RENEG_LIMIT } from "tls";
+
+
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -16,6 +20,19 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
+
+  hooks: {
+    afterAuth: async (session) => {
+      // ✅ When a shop installs or authenticates
+      const { shop, accessToken, admin } = session as any;
+      try {
+        await handleShopInfo(shop, accessToken, admin);
+      } catch (err) {
+        console.error("❌ Failed to save shop info:", err);
+      }
+    },
+  },
+
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),

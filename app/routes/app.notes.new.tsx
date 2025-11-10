@@ -63,7 +63,6 @@ export default function NewNote() {
     formData.append("products", JSON.stringify(selectedProducts));
     formData.append("noteTitle", noteTitle);
     formData.append("noteDescription", noteDescription);
-    console.log(formData, "this is form data ----------------------------------");
 
     await submit(formData, {
       method: "post",
