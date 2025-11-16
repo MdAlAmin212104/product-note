@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { updateNotes } from "app/models/notes";
@@ -51,6 +53,22 @@ export default function NewNote() {
     setNoteDescription("");
   }
 
+  // ⭐ NEW LOGIC IMPLEMENTED HERE ⭐
+  function handleCancel() {
+    const hasData =
+      selectedProducts.length > 0 ||
+      noteTitle.trim() !== "" ||
+      noteDescription.trim() !== "";
+
+    if (hasData) {
+      // শুধু ফর্ম clear করবে
+      removeProducts();
+    } else {
+      // রিডাইরেক্ট করবে
+      navigate("/app");
+    }
+  }
+
   async function handleSubmit() {
     if (!noteTitle || !noteDescription || selectedProducts.length === 0) {
       alert("Please fill all fields and select at least one product.");
@@ -66,11 +84,9 @@ export default function NewNote() {
 
     await submit(formData, {
       method: "post",
-      encType: "multipart/form-data"
+      encType: "multipart/form-data",
     });
     setLoading(false);
-    // alert("Note created successfully!");
-
     navigate("/app");
   }
 
@@ -79,11 +95,8 @@ export default function NewNote() {
       <s-section heading="Create Note">
         {/* Product Picker */}
         <s-stack direction="inline" gap="small" alignItems="center">
-          <s-clickable
-            paddingBlockEnd="base"
-            onClick={selectProduct}
-            accessibilityLabel="Select products"
-          >
+
+          <div onClick={selectProduct} style={{ width: "100%", paddingBlock: "10px", paddingBottom: "10px", cursor: "pointer" }}>
             <s-text-field
               required
               label="Select Products"
@@ -95,7 +108,7 @@ export default function NewNote() {
               }
               readOnly
             />
-          </s-clickable>
+          </div>
         </s-stack>
 
         {/* Note Title */}
@@ -117,12 +130,28 @@ export default function NewNote() {
         />
 
         {/* Buttons */}
-        <div style={{ display: "flex", justifyContent: "end", marginTop: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            marginTop: "20px",
+          }}
+        >
           <s-button-group>
-            <s-button slot="primary-action" onClick={handleSubmit} disabled={loading}>
+            <s-button
+              slot="primary-action"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
               {loading ? "Saving..." : "Save"}
             </s-button>
-            <s-button slot="secondary-actions" tone="critical" onClick={removeProducts}>
+
+            {/* Updated Cancel Button */}
+            <s-button
+              slot="secondary-actions"
+              tone="critical"
+              onClick={handleCancel}
+            >
               Cancel
             </s-button>
           </s-button-group>

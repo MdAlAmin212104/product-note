@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "../db.server";
 
 export async function handleShopInfo(shopDomain: string, accessToken: string, admin: any) {
