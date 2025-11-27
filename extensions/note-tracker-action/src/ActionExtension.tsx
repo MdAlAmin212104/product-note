@@ -73,10 +73,10 @@ function Extension() {
 
     const productId = data.selected[0].id;
 
-    // সব নোটের কপি তৈরি করো
+
     const notesCopy = [...allnotes];
 
-    // পুরনো note কিনা চেক করো
+  
     const existingIndex = notesCopy.findIndex((n: any) => n.id === note.id);
 
     let updatedNotes: Note[];

@@ -5,6 +5,7 @@
 import { updateNotes } from "app/models/notes";
 import { useState } from "react";
 import { ActionFunctionArgs, useNavigate, useSubmit } from "react-router";
+import {useAppBridge} from "@shopify/app-bridge-react";
 
 declare global {
   interface Window {
@@ -25,6 +26,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function NewNote() {
   const submit = useSubmit();
   const navigate = useNavigate();
+  const shopify = useAppBridge();
 
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
   const [noteTitle, setNoteTitle] = useState("");
@@ -32,11 +34,14 @@ export default function NewNote() {
   const [loading, setLoading] = useState(false);
 
   async function selectProduct() {
-    const products = await window.shopify.resourcePicker({
-      type: "product",
-      multiple: true,
-      action: "select",
-    });
+    const products = await shopify.resourcePicker({
+  type: "product",
+  multiple: true,
+  action: "select",
+  filter: {
+    variants: false, // Additional filter to exclude variants
+  },
+});
 
     if (products && products.length > 0) {
       const productData = products.map((p: any) => ({
@@ -61,10 +66,8 @@ export default function NewNote() {
       noteDescription.trim() !== "";
 
     if (hasData) {
-      // শুধু ফর্ম clear করবে
       removeProducts();
     } else {
-      // রিডাইরেক্ট করবে
       navigate("/app");
     }
   }
